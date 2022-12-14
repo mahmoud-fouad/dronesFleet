@@ -3,7 +3,10 @@ package com.musalasoft.services.repositories;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.junit.Before;
@@ -17,6 +20,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.musalasoft.entities.DroneModel;
 import com.musalasoft.entities.DroneState;
 import com.musalasoft.entities.Drones;
+import com.musalasoft.entities.Medication;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -57,6 +61,28 @@ public class DronesRepTest {
 		assertThat(drones).hasSize(1);
 		assertEquals(drones.get(0).getSerialNumber(), "1231ABC");
 		
+	}
+	@Test
+	public void testMedicienInsertion(){
+		try{
+		Drones d=  getIdelDroneHasBattryMorethan25();
+		List<Medication> medicines = new ArrayList<Medication>();
+		medicines.add(Medication.builder().name("12_ABC").weight(20).code("MED12").build());
+		medicines.add(Medication.builder().name("13-ABE").weight(60).code("56MED12").build());
+		medicines.add(Medication.builder().name("12_CB_C").weight(20).code("MED12M").build());
+		medicines.add(Medication.builder().name("AB-sdf-3").weight(100).code("MED12T").build());
+		
+		d.setLoadedMedications(medicines);
+		
+		droneRepository.save(d);
+		
+		assertThat(d.getLoadedMedications()).hasSize(4);
+		assertThat(d.getLoadedMedications().get(0).getId()).isGreaterThan(0L);
+		
+		}
+		catch (Exception e) {
+			fail();
+		}
 		
 	}
 	
@@ -80,5 +106,6 @@ private Drones getLoadingDroneHasBattryMorethan25(){
 	.batteryCapacityPercentage(60).serialNumber("1251ABF")
 	.state(DroneState.LOADING).build();
 }
+
 	
 }

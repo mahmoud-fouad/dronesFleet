@@ -35,7 +35,7 @@ public class DroneBatteryTest {
 	DronesService service;
 
 	FleetConfigurations fleetConfigurations;
-
+	
 	@Rule
 	public ExpectedException exceptionRule = ExpectedException.none();
 
@@ -43,7 +43,7 @@ public class DroneBatteryTest {
 	public void init() {
 		fleetConfigurations = new FleetConfigurations();
 		fleetConfigurations.setCapacity(10);
-		service = new DronesService(droneRepository, fleetConfigurations);
+		service = new DronesService(droneRepository, fleetConfigurations,null);
 
 	}
 

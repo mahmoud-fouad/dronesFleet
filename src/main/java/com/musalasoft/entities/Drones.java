@@ -1,5 +1,6 @@
 package com.musalasoft.entities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -28,8 +29,6 @@ import lombok.NoArgsConstructor;
 @Data
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
 /**
  * 
@@ -60,7 +59,7 @@ public class Drones {
 	// the loaded medications 
 	@OneToMany(cascade=CascadeType.ALL)
 	@JoinColumn(name="drone_id")
-	List<Medication> loadedMedications;
+	List<Medication> loadedMedications =new ArrayList<Medication>();
 	
 
 }

@@ -1,8 +1,10 @@
 package com.musalasoft.services;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.musalasoft.FleetConfigurations;
@@ -23,16 +25,15 @@ public class DronesService implements IDronesService{
 	
 	private DroneRepository droneRepository;
 	
+	private FleetConfigurations fleetConfigurations;
+	
+	private IMedicationloadingService medicationloadingService; 
 	
 	
-	@Value("${fleet.capacity}")
-	private int fleetCapacity;
-	
-	FleetConfigurations fleetConfigurations;
-	
-	public DronesService(DroneRepository droneRepository,FleetConfigurations fleetConfigurations) {
+	public DronesService(DroneRepository droneRepository,FleetConfigurations fleetConfigurations,IMedicationloadingService medicationloadingService) {
 		this.droneRepository=droneRepository;
 		this.fleetConfigurations=fleetConfigurations;
+		this.medicationloadingService=medicationloadingService;
 	}
 	
 	
@@ -74,12 +75,53 @@ public class DronesService implements IDronesService{
 
 
 	@Override
-	public void loadDroneMedication(long droneId, MedicationsReqRes dto) {
+	public void loadDroneMedication(long droneId, List<Medication> medications) {
+		
+		Drones drones = getDroneById(droneId);
+		
+		//check if the drone is available or not by check on its state and battery level
+		if(drones.getState()!=DroneState.IDLE || drones.getBatteryCapacityPercentage() <25)
+			throw new FleetExceptions(FleetExceptions.unAvailbeDrone);
+		
+		
+		if(medications.isEmpty())
+			throw new FleetExceptions(FleetExceptions.emptyPack);
+		// begin check on load weight
+		int totalLoad =0;
+		for(Medication med : medications)
+			totalLoad+= med.getWeight();
+		
+		if(drones.getWeightLimit() < totalLoad)
+			throw new FleetExceptions(FleetExceptions.overLoadedWeight);
+		
+		// set drone state as loading
+		drones.setState(DroneState.LOADING);
+		droneRepository.save(drones);
+		
+		for(Medication med: medications){
+			
+			// call loading service to process and if error happened unpack and throw loading Error
+			if(!medicationloadingService.loadMedication(drones, med)){
+				medicationloadingService.unpack(drones);
+				drones.setState(DroneState.IDLE);
+				droneRepository.save(drones);
+				throw new FleetExceptions(FleetExceptions.loadingError,HttpStatus.EXPECTATION_FAILED);
+			}
+			//add the medicine after successful load
+			else
+				drones.getLoadedMedications().add(med);
+		}
+		//after successful load all medicines drones states is loaded 
+		drones.setState(DroneState.LOADED);
+		droneRepository.save(drones);
 		
 	}
 	
 	private Drones getDroneById(long id){
-		return droneRepository.findById(id).orElseThrow(()-> new FleetExceptions(FleetExceptions.notFoundDrone));
+		Drones drone= droneRepository.findById(id).orElseThrow(()-> new FleetExceptions(FleetExceptions.notFoundDrone));
+		if(drone.getLoadedMedications()==null)
+			drone.setLoadedMedications(new ArrayList<Medication>());
+		return drone;
 	}
 	
 	 private Drones dtoToEntity(DroneDTO droneDto){

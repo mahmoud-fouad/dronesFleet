@@ -1,5 +1,6 @@
 package com.musalasoft.entities.restApis;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,11 +19,15 @@ import org.springframework.web.bind.annotation.RestController;
 import com.musalasoft.entities.Drones;
 import com.musalasoft.entities.Medication;
 import com.musalasoft.services.IDronesService;
+import com.musalasoft.services.IMedicationloadingService;
 
 @RestController
 public class Apis {
 	@Autowired
 	IDronesService dronesService;
+	
+	@Autowired
+	IMedicationloadingService medicationloadingService;
 
 	@PostMapping("/registerDone")
 	public ResponseEntity<Void> registerDrone(@Valid @RequestBody DroneDTO droneDto) {
@@ -31,8 +36,10 @@ public class Apis {
 	}
 
 	@PostMapping("/drone/{id}/loadMedications")
-	public ResponseEntity<Void> loadDroneMedication(@PathVariable long droneId , @RequestBody MedicationsReqRes req) {
-		dronesService.loadDroneMedication(droneId, req);
+	public ResponseEntity<Void> loadDroneMedication(@PathVariable long droneId , @Valid @RequestBody MedicationsReqRes req) {
+		List<Medication> medicien = req.getMedications().stream().map(medicationloadingService::getMedicateEntityFromDto).collect(Collectors.toList());
+		
+		dronesService.loadDroneMedication(droneId, medicien);
 		return ResponseEntity.noContent().build();
 	}
 

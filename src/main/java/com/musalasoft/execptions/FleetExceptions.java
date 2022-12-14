@@ -13,6 +13,10 @@ public class FleetExceptions extends RuntimeException {
 	public static String fullFleet="the fleet is full";
 	public static String notFoundDrone= "can not find this drone in the Fleet";
 	public static String inCompatableMode="incompatable drone model";
+	public static String loadingError="Error while loading and I am unpacking";
+	public static String overLoadedWeight="this is overloaded weight";
+	public static String emptyPack="there is no medicien to load";
+	public static String unAvailbeDrone="can not use this drone at this moment";
 	
 	public FleetExceptions(String message){
 		super(message);

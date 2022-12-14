@@ -17,6 +17,6 @@ public interface IDronesService {
 	
 	public List<Drones> getAvailableDrones();
 	
-	public void loadDroneMedication(long droneId , MedicationsReqRes dto);
+	public void loadDroneMedication(long droneId , List<Medication> medications );
 
 }
