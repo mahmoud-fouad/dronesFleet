@@ -46,7 +46,7 @@ public class DroneInfoApisTest {
 	@Autowired
 	MockMvc mvc;
 	
-	@MockBean
+	@Autowired
 	DroneRepository droneRepository;
 
 	List<Drones> drones;
