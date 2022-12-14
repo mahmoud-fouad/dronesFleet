@@ -9,14 +9,18 @@ import org.springframework.http.HttpStatus;
  */
 public class FleetExceptions extends RuntimeException {
 	HttpStatus status;
-
-	public FleetExceptions() {
+	
+	public static String fullFleet="the fleet is full";
+	public static String notFoundDrone= "can not find this drone in the Fleet";
+	public static String inCompatableMode="incompatable drone model";
+	
+	public FleetExceptions(String message){
+		super(message);
 		this.status=HttpStatus.BAD_REQUEST;
 	}
-	
-	FleetExceptions(HttpStatus status) {
-	       this();
-	       this.status = status;
-	   }
-	
+
+	public FleetExceptions(String message , HttpStatus status ){
+		super(message);
+		this.status= status;
+	}
 }

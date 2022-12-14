@@ -5,7 +5,12 @@ import org.springframework.stereotype.Repository;
 
 import com.musalasoft.entities.Drones;
 
+/**
+ * 
+ * @author mahmoud
+ * drones repo
+ */
 @Repository
 public interface DroneRepository extends JpaRepository<Drones, Long> {
-
+	
 }

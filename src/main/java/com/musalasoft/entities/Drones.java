@@ -12,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Max;
 
 import org.hibernate.annotations.Cascade;
@@ -42,7 +43,7 @@ public class Drones {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private long id;
 	
-	@Column(length=100,nullable=false)
+	@Column(length=100,nullable=false,unique=true)
 	private String serialNumber;
 	
 	@Enumerated(EnumType.STRING)
