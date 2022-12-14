@@ -3,6 +3,7 @@ package com.musalasoft.services;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
+import java.util.Collections;
 import java.util.Optional;
 
 import org.junit.Before;
@@ -16,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.musalasoft.FleetConfigurations;
 import com.musalasoft.entities.Drones;
+import com.musalasoft.entities.Medication;
 import com.musalasoft.execptions.FleetExceptions;
 import com.musalasoft.services.repositories.DroneRepository;
 
@@ -26,7 +28,7 @@ import com.musalasoft.services.repositories.DroneRepository;
  * 
  * @author mahmoud test cases for add new drone
  */
-public class DroneBatteryTest {
+public class DroneMedicationTest {
 
 	@Mock
 	DroneRepository droneRepository;
@@ -48,24 +50,23 @@ public class DroneBatteryTest {
 
 	// check that system will throw FleetExceptions.notFoundDrone in case not exist drone
 	@Test
-	public void testDoesnotExistDrone() {
+	public void getDroneMedicationForNoneExistingDrone() {
 		
-		
-
 		exceptionRule.expect(FleetExceptions.class);
 		exceptionRule.expectMessage(FleetExceptions.notFoundDrone);
-		 service.getDroneBattaryLevel(10L);
+		 service.getDroneMedication(10L);
 	}
 
-	//test correct response
+	// get drone Medications
 	@Test
-	public void testExistDrone() {
+	public void getDroneMedication() {
+		Medication m =Medication.builder().code("medCode").build();
 
-		Drones d = Drones.builder().batteryCapacityPercentage(50).build();
+		Drones d = Drones.builder().batteryCapacityPercentage(50).loadedMedications(Collections.singletonList(m)).build();
 		Optional<Drones> drononOptional =Optional.of(d);
 		when(droneRepository.findById(10L)).thenReturn(drononOptional );
 		
-		assertEquals(50, service.getDroneBattaryLevel(10L));
+		assertEquals("medCode", service.getDroneMedication(10L).get(0).getCode());
 	}
 
 }

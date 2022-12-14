@@ -56,8 +56,7 @@ public class DronesService implements IDronesService{
 
 	@Override
 	public List<Medication> getDroneMedication(long droneId) {
-		// TODO Auto-generated method stub
-		return null;
+		return getDroneById(droneId).getLoadedMedications();
 	}
 
 
