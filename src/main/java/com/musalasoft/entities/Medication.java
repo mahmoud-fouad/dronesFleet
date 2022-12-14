@@ -27,14 +27,14 @@ public class Medication {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private  long id;
 
-	@Pattern(regexp="^([A-Z]*\\_*[0-9]*)+")
+	@Pattern(regexp="([A-Za-z]*[0-9]*\\_*\\-*)+")
 	@Column(nullable=false)
 	private String name;
 	
 	private int weight;
 	
-	@Pattern(regexp="([A-Za-z]*\\_*\\-*)+")
 	@Column(nullable=false)
+	@Pattern(regexp="^([A-Z]*\\_*[0-9]*)+")
 	private String code;
 	
 	//picture url of the medication case

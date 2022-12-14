@@ -119,6 +119,7 @@ public class DronesService implements IDronesService{
 	}
 	
 	private Drones getDroneById(long id){
+		
 		Drones drone= droneRepository.findById(id).orElseThrow(()-> new FleetExceptions(FleetExceptions.notFoundDrone));
 		if(drone.getLoadedMedications()==null)
 			drone.setLoadedMedications(new ArrayList<Medication>());

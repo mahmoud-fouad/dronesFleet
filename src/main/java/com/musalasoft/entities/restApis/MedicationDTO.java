@@ -1,6 +1,6 @@
 package com.musalasoft.entities.restApis;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 
 import lombok.AllArgsConstructor;
@@ -18,12 +18,12 @@ import lombok.Setter;
 @NoArgsConstructor
 public class MedicationDTO {
 	
-	@Pattern(regexp="^([A-Z]*\\_*[0-9]*)+")
-	@NotBlank
+	@NotEmpty
+	@Pattern(regexp="^([A-Za-z]*[0-9]*\\_*\\-*)+")
 	private String name;
 	
-	@Pattern(regexp="([A-Za-z]*\\_*\\-*)+")
-	@NotBlank
+	@NotEmpty
+	@Pattern(regexp="^([A-Z]*\\_*[0-9]*)+")
 	private String code;
 	
 	private int weight;

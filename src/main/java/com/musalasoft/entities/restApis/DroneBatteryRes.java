@@ -14,7 +14,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DroneBatteryRes {
-	
+
 	private int batteryLevel;
 
 }

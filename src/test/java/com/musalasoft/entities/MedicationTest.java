@@ -14,7 +14,7 @@ import org.junit.runners.JUnit4;
 public class MedicationTest {
 	
 	String codeRegex="^([A-Z]*\\_*[0-9]*)+";
-	String nameRegex="^([A-Za-z]*\\_*\\-*)+";
+	String nameRegex="^([A-Za-z]*[0-9]*\\_*\\-*)+";
 	@Test
 	public void testMedictionHasUnderScoreCode(){
 
@@ -107,12 +107,12 @@ public class MedicationTest {
 	}
 	
 	@Test
-	public void testMedictionIncorrectName(){
+	public void testMedictionNameWithNumbers_(){
 		
 		String name="dron-e_1";
 		String name2="dron2";
-		assertFalse(name.matches(nameRegex));
-		assertFalse(name2.matches(nameRegex));
+		assertTrue(name.matches(nameRegex));
+		assertTrue(name2.matches(nameRegex));
 	}
 
 }

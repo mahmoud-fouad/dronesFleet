@@ -30,13 +30,13 @@ public class Apis {
 	IMedicationloadingService medicationloadingService;
 
 	@PostMapping("/registerDone")
-	public ResponseEntity<Void> registerDrone( @Valid @RequestBody DroneDTO droneDto) {
+	public ResponseEntity<Void> registerDrone( @Valid @RequestBody(required=true) DroneDTO droneDto) {
 		dronesService.addDrone(droneDto);
 		return ResponseEntity.ok().build();
 	}
 
 	@PostMapping("/drone/{id}/medications")
-	public ResponseEntity<Void> loadDroneMedication(@PathVariable(name="id") long droneId , @Valid @RequestBody MedicationsReqRes req) {
+	public ResponseEntity<Void> loadDroneMedication(@PathVariable(name="id") long droneId , @Valid @RequestBody(required=true) MedicationsReqRes req) {
 		List<Medication> medicien = req.getMedications().stream().map(medicationloadingService::getMedicateEntityFromDto).collect(Collectors.toList());
 		
 		dronesService.loadDroneMedication(droneId, medicien);

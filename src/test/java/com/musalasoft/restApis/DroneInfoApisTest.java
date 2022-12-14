@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -25,6 +26,7 @@ import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import com.google.gson.GsonBuilder;
+import com.musalasoft.entities.DroneState;
 import com.musalasoft.entities.Drones;
 import com.musalasoft.entities.restApis.DroneDTO;
 import com.musalasoft.execptions.FleetExceptions;
@@ -44,7 +46,7 @@ public class DroneInfoApisTest {
 	@Autowired
 	MockMvc mvc;
 	
-	@Autowired
+	@MockBean
 	DroneRepository droneRepository;
 
 	List<Drones> drones;
@@ -63,9 +65,8 @@ public class DroneInfoApisTest {
 		try {
 			 MvcResult result = mvc.perform(request)
 					 .andExpect(status().isBadRequest())
-					 .andExpect(jsonPath("$.batteryLevel",is(FleetExceptions.notFoundDrone)))
+					 .andExpect(jsonPath("$.message",is(FleetExceptions.notFoundDrone)))
 					 .andReturn();
-			 System.out.println( result.getResponse().getContentAsString());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -82,11 +83,10 @@ public class DroneInfoApisTest {
 			RequestBuilder request = MockMvcRequestBuilders.post("/registerDone").contentType(MediaType.APPLICATION_JSON_UTF8)
 			        .content(new GsonBuilder().create().toJson(requestBody));
 			
-			 MvcResult result = mvc.perform(request)
+			 mvc.perform(request)
 					 .andExpect(status().isBadRequest())
 					 .andExpect(jsonPath("$.message",is(FleetExceptions.inCompatableMode)))
 					 .andReturn();
-			 System.out.println( result.getResponse().getContentAsString());
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail();
@@ -110,7 +110,6 @@ public class DroneInfoApisTest {
 			DroneDTO requestBody =DroneDTO.builder().model("Cruiserweight").serialNumber(generatedString).weightLimit(400).build();
 			
 			String jsonRequest = new GsonBuilder().create().toJson(requestBody);
-			System.out.println(jsonRequest);
 			
 			RequestBuilder request = MockMvcRequestBuilders.post("/registerDone").contentType(MediaType.APPLICATION_JSON_UTF8)
 			        .content(jsonRequest);
@@ -131,7 +130,6 @@ public class DroneInfoApisTest {
 		try {
 			DroneDTO requestBody =DroneDTO.builder().weightLimit(400).build();
 			 String jsonRequest = new GsonBuilder().create().toJson(requestBody);
-				System.out.println(jsonRequest);
 			 
 			 RequestBuilder  request = MockMvcRequestBuilders.post("/registerDone").contentType(MediaType.APPLICATION_JSON_UTF8)
 				        .content(jsonRequest);
@@ -139,7 +137,6 @@ public class DroneInfoApisTest {
 			 MvcResult result = mvc.perform(request)
 						 .andExpect(status().isBadRequest())
 						 .andReturn();
-			 System.out.println(result.getResponse().getContentAsString());
 			 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -164,7 +161,6 @@ public class DroneInfoApisTest {
 			DroneDTO requestBody =DroneDTO.builder().model("Cruiserweight").serialNumber("123123").weightLimit(400).build();
 			
 			String jsonRequest = new GsonBuilder().create().toJson(requestBody);
-			System.out.println(jsonRequest);
 			
 			RequestBuilder request = MockMvcRequestBuilders.post("/registerDone").contentType(MediaType.APPLICATION_JSON_UTF8)
 			        .content(jsonRequest);
@@ -191,6 +187,32 @@ public class DroneInfoApisTest {
 		 MvcResult result = mvc.perform(request)
 				 .andExpect(status().isOk())
 				 .andExpect(jsonPath("$.batteryLevel",is(drones.get(0).getBatteryCapacityPercentage())))
+				 .andReturn();
+		 
+	} catch (Exception e) {
+		e.printStackTrace();
+		fail();
+	}
+		
+	}
+	
+	@Test
+	public void getAvaliableDrones(){
+		try {
+			
+			assertThat(drones.size()).isGreaterThan(0);
+			
+			List<Drones> avaibleDrones = drones.stream().filter((dron)-> dron.getBatteryCapacityPercentage()>25).filter((dron)->dron.getState()==DroneState.IDLE).collect(Collectors.toList());
+			
+			assertThat(avaibleDrones.size()).isGreaterThan(0);
+			assertThat(avaibleDrones.size()).isLessThan(drones.size());
+			
+			RequestBuilder request = MockMvcRequestBuilders.get("/getAvailableDrones");
+		
+		  mvc.perform(request)
+				 .andExpect(status().isOk())
+				 .andExpect(jsonPath("$.drones[0].serialNumber",is(avaibleDrones.get(0).getSerialNumber())))
+				 .andExpect(jsonPath("$.drones["+(avaibleDrones.size()-1)+"].serialNumber",is(avaibleDrones.get(avaibleDrones.size()-1).getSerialNumber())))
 				 .andReturn();
 		 
 	} catch (Exception e) {
