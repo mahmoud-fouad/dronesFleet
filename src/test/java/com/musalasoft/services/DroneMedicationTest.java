@@ -26,7 +26,8 @@ import com.musalasoft.services.repositories.DroneRepository;
 
 /**
  * 
- * @author mahmoud test cases for add new drone
+ * @author mahmoud 
+ * test cases for Drone mediation
  */
 public class DroneMedicationTest {
 

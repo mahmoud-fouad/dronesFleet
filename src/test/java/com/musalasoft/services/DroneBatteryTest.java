@@ -24,7 +24,8 @@ import com.musalasoft.services.repositories.DroneRepository;
 
 /**
  * 
- * @author mahmoud test cases for add new drone
+ * @author mahmoud 
+ * test cases for get drone battary level
  */
 public class DroneBatteryTest {
 
