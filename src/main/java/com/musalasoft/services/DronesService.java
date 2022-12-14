@@ -68,14 +68,13 @@ public class DronesService implements IDronesService{
 
 	@Override
 	public List<Drones> getAvailableDrones() {
-		// TODO Auto-generated method stub
-		return null;
+		//select drones which in idle state and its battery more Than 25;
+		return droneRepository.getDronesByStatesandBatteryLevel(DroneState.IDLE,25);
 	}
 
 
 	@Override
 	public void loadDroneMedication(long droneId, MedicationsReqRes dto) {
-		// TODO Auto-generated method stub
 		
 	}
 	
