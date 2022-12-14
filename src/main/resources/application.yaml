@@ -13,3 +13,4 @@ spring:
     
 fleet:
   capacity: 10
+  

@@ -1,6 +1,5 @@
 package com.musalasoft.entities.restApis;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,6 +21,7 @@ import com.musalasoft.services.IDronesService;
 import com.musalasoft.services.IMedicationloadingService;
 
 @RestController
+
 public class Apis {
 	@Autowired
 	IDronesService dronesService;
@@ -30,21 +30,21 @@ public class Apis {
 	IMedicationloadingService medicationloadingService;
 
 	@PostMapping("/registerDone")
-	public ResponseEntity<Void> registerDrone(@Valid @RequestBody DroneDTO droneDto) {
+	public ResponseEntity<Void> registerDrone( @Valid @RequestBody DroneDTO droneDto) {
 		dronesService.addDrone(droneDto);
-		return ResponseEntity.noContent().build();
+		return ResponseEntity.ok().build();
 	}
 
-	@PostMapping("/drone/{id}/loadMedications")
-	public ResponseEntity<Void> loadDroneMedication(@PathVariable long droneId , @Valid @RequestBody MedicationsReqRes req) {
+	@PostMapping("/drone/{id}/medications")
+	public ResponseEntity<Void> loadDroneMedication(@PathVariable(name="id") long droneId , @Valid @RequestBody MedicationsReqRes req) {
 		List<Medication> medicien = req.getMedications().stream().map(medicationloadingService::getMedicateEntityFromDto).collect(Collectors.toList());
 		
 		dronesService.loadDroneMedication(droneId, medicien);
-		return ResponseEntity.noContent().build();
+		return ResponseEntity.ok().build();
 	}
 
 	@GetMapping("/drone/{id}/medications")
-	public ResponseEntity<MedicationsReqRes> getDroneMedication(@PathVariable long droneId) {
+	public ResponseEntity<MedicationsReqRes> getDroneMedication(@PathVariable(name="id") long droneId) {
 		
 		List<Medication> medications = dronesService.getDroneMedication(droneId);
 		MedicationsReqRes res = new MedicationsReqRes(medications.stream().map(this::getMedicationDTOFromEntity).collect(Collectors.toList()));
@@ -52,7 +52,7 @@ public class Apis {
 	}
 	
 	@GetMapping("/drone/{id}/batteryLevel")
-	public ResponseEntity<DroneBatteryRes> getDroneBatteryLevel(@PathVariable long droneId) {
+	public ResponseEntity<DroneBatteryRes> getDroneBatteryLevel(@PathVariable(name="id") long droneId) {
 
 		DroneBatteryRes res = DroneBatteryRes.builder().batteryLevel(dronesService.getDroneBattaryLevel(droneId)).build();
 		return new ResponseEntity<DroneBatteryRes>(res, HttpStatus.OK);

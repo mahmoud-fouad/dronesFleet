@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.Random;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
@@ -85,6 +86,29 @@ public class AaddDronesTest {
 		 Set<ConstraintViolation<Drones>> violations = validator.validate(drone);
 		 
 		 assertThat(violations).hasSize(1);
+	}
+	
+	@Test
+	public void testDroneSerialExceedlimitData(){
+		
+		 int leftLimit = 48; // numeral '0'
+		    int rightLimit = 122; // letter 'z'
+		    int targetStringLength = 150;
+		    Random random = new Random();
+
+		    String generatedString = random.ints(leftLimit, rightLimit + 1)
+		      .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
+		      .limit(targetStringLength)
+		      .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+		      .toString();
+		Drones drone = Drones.builder().batteryCapacityPercentage(100).model(DroneModel.Cruiserweight).serialNumber(generatedString).weightLimit(200).build();
+		
+		Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
+		 Set<ConstraintViolation<Drones>> violations = validator.validate(drone);
+		 
+		 violations.forEach((vio) -> assertThat(vio.getMessage()).isEqualTo("serial number lenght can not exceed 100") );
+		 assertThat(violations).hasSize(1);
+		 
 	}
 	
 	//test the mapping from dto to check that the model will converted from string to enum

@@ -45,6 +45,7 @@ public class DronesService implements IDronesService{
 			throw new FleetExceptions(FleetExceptions.fullFleet);
 		
 		Drones drone = dtoToEntity(droneDto);
+		// add deafult values for battary and  make it in idle state
 		drone.setBatteryCapacityPercentage(100);
 		drone.setState(DroneState.IDLE);
 		

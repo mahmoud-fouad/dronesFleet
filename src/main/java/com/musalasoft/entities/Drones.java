@@ -15,6 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Max;
+import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.Cascade;
 
@@ -30,6 +31,8 @@ import lombok.NoArgsConstructor;
 @Getter
 @Setter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 /**
  * 
  * @author mahmoud
@@ -43,6 +46,7 @@ public class Drones {
 	private long id;
 	
 	@Column(length=100,nullable=false,unique=true)
+	@Size(max=100,message="serial number lenght can not exceed 100")
 	private String serialNumber;
 	
 	@Enumerated(EnumType.STRING)
