@@ -35,7 +35,7 @@ public class ScheduledDroneBattryCheck {
 	@Autowired
 	ApplicationEventPublisher applicationEventPublisher;
 	
-	@Scheduled(fixedRate = 60000)
+	@Scheduled(fixedRateString = "${fleet.updateDroneBatteryInterval}")
 	public void reportCurrentTime() {
 		log.info("starting check on  batteries at {}", dateFormat.format(new Date()));
 		

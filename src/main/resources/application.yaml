@@ -22,4 +22,6 @@ spring:
     
 fleet:
   capacity: 10
+  updateDroneBatteryInterval: 60000
+  
   
