@@ -27,10 +27,10 @@ public class DronesService implements IDronesService{
 	
 	private FleetConfigurations fleetConfigurations;
 	
-	private IMedicationloadingService medicationloadingService; 
+	private IDroneCommunicationService medicationloadingService; 
 	
 	
-	public DronesService(DroneRepository droneRepository,FleetConfigurations fleetConfigurations,IMedicationloadingService medicationloadingService) {
+	public DronesService(DroneRepository droneRepository,FleetConfigurations fleetConfigurations,IDroneCommunicationService medicationloadingService) {
 		this.droneRepository=droneRepository;
 		this.fleetConfigurations=fleetConfigurations;
 		this.medicationloadingService=medicationloadingService;

@@ -46,7 +46,7 @@ public class DroneMedicationTest {
 	
 	
 	@Mock
-	IMedicationloadingService medicationLoadingServiceMock;
+	IDroneCommunicationService medicationLoadingServiceMock;
 	
 	
 	
@@ -147,7 +147,7 @@ public class DroneMedicationTest {
 	@Test
 	public void testloadSuccess(){
 		
-		service = new DronesService(droneRepository, fleetConfigurations,new MedicationLoadingService());
+		service = new DronesService(droneRepository, fleetConfigurations,new DroneCommunicationService());
 		
 		Drones d = Drones.builder().id(2L).state(DroneState.IDLE).batteryCapacityPercentage(100).model(DroneModel.Middleweight).weightLimit(300).build();
 		Optional<Drones> drononOptional =Optional.of(d);

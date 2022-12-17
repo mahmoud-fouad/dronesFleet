@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.musalasoft.entities.Drones;
 import com.musalasoft.entities.Medication;
 import com.musalasoft.services.IDronesService;
-import com.musalasoft.services.IMedicationloadingService;
+import com.musalasoft.services.IDroneCommunicationService;
 
 @RestController
 
@@ -27,7 +27,7 @@ public class Apis {
 	IDronesService dronesService;
 	
 	@Autowired
-	IMedicationloadingService medicationloadingService;
+	IDroneCommunicationService medicationloadingService;
 
 	@PostMapping("/registerDone")
 	public ResponseEntity<Void> registerDrone( @Valid @RequestBody(required=true) DroneDTO droneDto) {
