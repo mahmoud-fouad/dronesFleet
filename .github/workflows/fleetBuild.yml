@@ -10,9 +10,9 @@ name: build and test fleet application flow
 
 on:
   push:
-    branches: [ "workflows" ]
+    branches: [ "wofklows" ]
   pull_request:
-    branches: [ "workflows" ]
+    branches: [ "wofklows" ]
 
 jobs:
   build:
